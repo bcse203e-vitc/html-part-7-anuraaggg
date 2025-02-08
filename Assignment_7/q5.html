@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text Analyzer</title>
+</head>
+<body>
+    <h2>Text Analyzer</h2>
+    
+    <label for="inputText">Enter a text: </label>
+    <textarea id="inputText" rows="4" cols="50" oninput="analyzeText()"></textarea>
+    <br>
+    
+    <h3>Character Count (including spaces): <span id="charCount"></span></h3>
+    <h3>Word Count: <span id="wordCount"></span></h3>
+    <h3>Text with Highlighted Repeated Words:</h3>
+    <p id="highlightedText"></p>
+
+    <script>
+        function analyzeText() {
+            let text = document.getElementById("inputText").value;
+
+            let charCount = text.length;
+            let wordCount = text.trim().split(/\s+/).filter(Boolean).length;
+            
+            let words = text.trim().split(/\s+/).filter(Boolean);
+            let wordFreq = {};
+            let highlightedText = text;
+
+            words.forEach(word => {
+                wordFreq[word.toLowerCase()] = (wordFreq[word.toLowerCase()] || 0) + 1;
+            });
+
+            words.forEach(word => {
+                if (wordFreq[word.toLowerCase()] > 1) {
+                    let regex = new RegExp(`\\b${word}\\b`, 'gi');
+                    highlightedText = highlightedText.replace(regex, `<mark>${word}</mark>`);
+                }
+            });
+
+            document.getElementById("charCount").textContent = charCount;
+            document.getElementById("wordCount").textContent = wordCount;
+            document.getElementById("highlightedText").innerHTML = highlightedText;
+        }
+    </script>
+</body>
+</html>
